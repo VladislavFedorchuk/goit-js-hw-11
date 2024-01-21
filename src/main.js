@@ -17,15 +17,6 @@ const simpleGallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
-function showErrorMessage(message) {
-  const errorSvg = 'path/to/your/error.svg'; 
-
-  iziToast.show({
-    position: 'topRight',
-    iconUrl: errorSvg,
-  });
-}
-
 
 const form = document.querySelector('.gallery-form');
 const searchInput = document.querySelector('.search-input');
@@ -33,6 +24,22 @@ const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
 
 form.addEventListener('submit', searchPhotos);
+
+function showErrorMessage(message) {
+  const errorSvg = 'path/to/your/error.svg';
+
+  iziToast.show({
+    position: 'topRight',
+    iconUrl: errorSvg,
+    message,
+    backgroundColor: '#EF4040',
+    messageColor: '#FAFAFB',
+    messageSize: '16px',
+    close: false,
+    closeOnClick: true,
+    closeOnEscape: true,
+  });
+}
 
 function searchPhotos(event) {
   event.preventDefault();
@@ -59,12 +66,16 @@ function fetchPhotos() {
 
   const searchParamsStringURL = new URLSearchParams(searchParams).toString();
 
-  return fetch(`${url}?${searchParamsStringURL}`).then(response => {
-    if (!response.ok) {
-      throw new Error(response.status);
-    }
-    return response.json();
-  });
+  return fetch(`${url}?${searchParamsStringURL}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .finally(() => {
+      loader.style.display = 'none';
+    });
 }
 
 function createGallery(photos) {
@@ -72,9 +83,9 @@ function createGallery(photos) {
     showErrorMessage(
       'Sorry, there are no images matching your search query. Please, try again!'
     );
-    loader.style.display = 'none';
     return;
   }
+
   const markup = photos.hits
     .map(
       ({
@@ -100,20 +111,6 @@ function createGallery(photos) {
       }
     )
     .join('');
-  gallery.insertAdjacentHTML('afterbegin', markup);
-  loader.style.display = 'none';
-}
 
-function showErrorMessage(message) {
-  iziToast.show({
-    position: 'topRight',
-    iconUrl: errorSvg,
-    message,
-    backgroundColor: '#EF4040',
-    messageColor: '#FAFAFB',
-    messageSize: '16px',
-    close: false,
-    closeOnClick: true,
-    closeOnEscape: true,
-  });
+  gallery.insertAdjacentHTML('afterbegin', markup);
 }
