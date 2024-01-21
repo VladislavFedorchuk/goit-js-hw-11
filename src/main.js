@@ -17,6 +17,15 @@ const simpleGallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
+function showErrorMessage(message) {
+  const errorSvg = 'path/to/your/error.svg'; 
+
+  iziToast.show({
+    position: 'topRight',
+    iconUrl: errorSvg,
+  });
+}
+
 
 const form = document.querySelector('.gallery-form');
 const searchInput = document.querySelector('.search-input');
