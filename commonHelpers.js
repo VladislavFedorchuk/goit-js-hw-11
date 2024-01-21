@@ -1,0 +1,12 @@
+import{S as d,i as y}from"./assets/vendor-18365dff.js";(function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))a(e);new MutationObserver(e=>{for(const r of e)if(r.type==="childList")for(const s of r.addedNodes)s.tagName==="LINK"&&s.rel==="modulepreload"&&a(s)}).observe(document,{childList:!0,subtree:!0});function n(e){const r={};return e.integrity&&(r.integrity=e.integrity),e.referrerpolicy&&(r.referrerPolicy=e.referrerpolicy),e.crossorigin==="use-credentials"?r.credentials="include":e.crossorigin==="anonymous"?r.credentials="omit":r.credentials="same-origin",r}function a(e){if(e.ep)return;e.ep=!0;const r=n(e);fetch(e.href,r)}})();const h="https://pixabay.com/api/",c={key:"41942411-47547b04f91f4c6a01d45aac7",q:"",image_type:"photo",orientation:"horizontal",safesearch:"true",per_page:90},g=new d(".gallery a",{overlayOpacity:.8,captionsData:"alt",captionDelay:250}),b=document.querySelector(".gallery-form"),u=document.querySelector(".search-input"),f=document.querySelector(".gallery"),i=document.querySelector(".loader");b.addEventListener("submit",S);function S(o){if(o.preventDefault(),!u.value.trim()){l("Please fill in the search field");return}const t=o.currentTarget;L().then(n=>w(n)).catch(n=>l(`Something was wrong ${n}`)).finally(()=>{t.reset(),g.refresh()})}function L(){f.innerHTML="",i.style.display="inline-block",c.q=u.value.trim();const o=new URLSearchParams(c).toString();return fetch(`${h}?${o}`).then(t=>{if(!t.ok)throw new Error(t.status);return t.json()})}function w(o){if(!o.total){l("Sorry, there are no images matching your search query. Please, try again!"),i.style.display="none";return}const t=o.hits.map(({largeImageURL:n,webformatURL:a,tags:e,likes:r,views:s,comments:m,downloads:p})=>`<li class="gallery-item">
+          <a href="${n}">
+            <img class="api-img" src="${a}" alt="${e}">
+            <div class="img-desc">
+              <span><b>Likes:</b> <br/>${r}</span>
+              <span><b>Views:</b> <br/>${s}</span>
+              <span><b>Comments:</b> <br/>${m}</span>
+              <span><b>Downloads:</b> <br/>${p}</span>
+            </div>
+          </a>
+        </li>`).join("");f.insertAdjacentHTML("afterbegin",t),i.style.display="none"}function l(o){y.show({position:"topRight",iconUrl:errorSvg,message:o,backgroundColor:"#EF4040",messageColor:"#FAFAFB",messageSize:"16px",close:!1,closeOnClick:!0,closeOnEscape:!0})}
+//# sourceMappingURL=commonHelpers.js.map
